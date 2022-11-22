@@ -144,23 +144,8 @@ class Predictor(BasePredictor):
             **extra_kwargs,
         )
 
-        samples = [
-            output.images[i]
-            for i, nsfw_flag in enumerate(output.nsfw_content_detected)
-            if not nsfw_flag
-        ]
-
-        if len(samples) == 0:
-            raise Exception(
-                f"NSFW content detected. Try running it again, or try a different prompt."
-            )
-
-        if num_outputs > len(samples):
-            print(
-                f"NSFW content detected in {num_outputs - len(samples)} outputs, showing the rest {len(samples)} images..."
-            )
         output_paths = []
-        for i, sample in enumerate(samples):
+        for i, sample in enumerate(output.images):
             output_path = f"/tmp/out-{i}.png"
             sample.save(output_path)
             output_paths.append(Path(output_path))
